@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KatapatanEagerGNC LMS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<nav>
+    <h3>KatapatanEagerGNC</h3>
+    <a href="">About Us</a>
+</nav>
+
+<div class="container">
+
+    <div class="sideImage"></div>
+
+    <main>
+
+        <div class="login-card">
+
+            <h1>Login</h1>
+
+            <select class="role-select" onchange="changeRole(this.value)">
+                <option disabled selected>Select Role</option>
+                <option value="admin">Admin</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
+
+            <input type="text" placeholder="User ID">
+
+            <input type="password" placeholder="Password">
+
+            <button>Login</button>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+function changeRole(role){
+    const pages={
+        admin:"admin.html",
+        student:"student.html",
+        teacher:"teacher.html"
+    }
+
+    if(pages[role]){
+        window.location.href=pages[role]
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+class Student extends User{
+
+}
