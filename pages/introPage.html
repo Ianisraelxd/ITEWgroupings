@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KatapatanEagerGNC LMS</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 </head>
 
 <body>
@@ -35,7 +35,7 @@
 
             <input type="password" placeholder="Password">
 
-            <button>Login</button>
+            <button id="loginButton">Login</button>
 
         </div>
 
@@ -44,6 +44,15 @@
 </div>
 
 <script>
+    
+
+ const loginButton = document.querySelector("#loginButton");
+
+    loginButton.addEventListener("click", function(){
+        window.location.href = "admin.html";
+    })
+
+
 function changeRole(role){
     const pages={
         admin:"admin.html",
@@ -55,6 +64,8 @@ function changeRole(role){
         window.location.href=pages[role]
     }
 }
+
+ 
 </script>
 
 </body>

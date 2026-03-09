@@ -55,7 +55,7 @@ nav a{
 
 .sideImage{
     flex:1;
-    background-image:url(nigger.jpg);
+    background-image:url(Media/nigger.jpg);
     background-size:cover;
     background-position:center;
 }
@@ -66,6 +66,7 @@ main{
     display:flex;
     align-items:center;
     justify-content:center;
+    flex-direction: column;
     padding:var(--spacing-xl);
 }
 
@@ -125,6 +126,13 @@ button:hover{
 }
 
 
+div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 @media(max-width:900px){
 
     .sideImage{
@@ -136,3 +144,4 @@ button:hover{
     }
 
 }
+
