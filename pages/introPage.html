@@ -5,13 +5,79 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KatapatanEagerGNC LMS</title>
 <link rel="stylesheet" href="../style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    .toggle-container {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .toggle-btn {
+        background: none;
+        border: none;
+        color: var(--blue-slate);
+        cursor: pointer;
+        font-size: 0.9rem;
+        text-decoration: underline;
+    }
+    .toggle-btn:hover {
+        color: var(--burnt-peach);
+    }
+    .signup-fields {
+        display: none;
+    }
+    .signup-fields.active {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .subjects-section {
+        display: none;
+    }
+    .subjects-section.active {
+        display: block;
+    }
+    .subjects-section label {
+        font-size: 0.85rem;
+        color: var(--blue-slate);
+        margin-bottom: 8px;
+        display: block;
+    }
+    .subjects-checkboxes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+    }
+    .subjects-checkboxes label {
+        font-size: 0.8rem;
+        color: #555;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .subjects-checkboxes input {
+        width: auto;
+    }
+    #signupError {
+        color: red;
+        font-size: 0.8rem;
+        text-align: center;
+        display: none;
+    }
+    #loginError {
+        color: red;
+        font-size: 0.8rem;
+        text-align: center;
+        display: none;
+    }
+</style>
 </head>
 
 <body>
 
 <nav>
     <h3>KatapatanEagerGNC</h3>
-    <a href="">About Us</a>
+    <a href="about.html">About Us</a>
 </nav>
 
 <div class="container">
@@ -22,20 +88,60 @@
 
         <div class="login-card">
 
-            <h1>Login</h1>
+            <h1 id="formTitle">Login</h1>
 
-            <select class="role-select" onchange="changeRole(this.value)">
-                <option disabled selected>Select Role</option>
-                <option value="admin">Admin</option>
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-            </select>
+            <!-- Login Form -->
+            <div id="loginForm">
+                <select class="role-select" id="loginRole">
+                    <option value="" disabled>Select Role</option>
+                    <option value="Student">Student</option>
+                    <option value="Teacher">Teacher</option>
+                    <option value="Administrator">Administrator</option>
+                </select>
 
-            <input type="text" placeholder="User ID">
+                <input type="text" id="loginId" placeholder="User ID / Account Number">
 
-            <input type="password" placeholder="Password">
+                <input type="password" id="loginPassword" placeholder="Password">
 
-            <button id="loginButton">Login</button>
+                <p id="loginError">Invalid credentials!</p>
+
+                <button id="loginButton">Login</button>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div id="signupForm" class="signup-fields">
+                <input type="text" id="signupId" placeholder="Account Number (Student/Teacher No.)">
+                <input type="text" id="signupFirstName" placeholder="First Name">
+                <input type="text" id="signupLastName" placeholder="Last Name">
+                <input type="password" id="signupPassword" placeholder="Password">
+                
+                    <select id="signupRole" class="role-select">
+                    <option value="" disabled >Select Role</option>
+                    <option value="Student">Student</option>
+                    <option value="Teacher">Teacher</option>
+                    <option value="Administrator">Administrator</option>
+                </select>
+
+                <div id="subjectsSection" class="subjects-section">
+                    <label>Select at least 3 subjects:</label>
+                    <div class="subjects-checkboxes">
+                        <label><input type="checkbox" class="subject-chk" value="Mathematics"> Mathematics</label>
+                        <label><input type="checkbox" class="subject-chk" value="Science"> Science</label>
+                        <label><input type="checkbox" class="subject-chk" value="English"> English</label>
+                        <label><input type="checkbox" class="subject-chk" value="History"> History</label>
+                        <label><input type="checkbox" class="subject-chk" value="Filipino"> Filipino</label>
+                        <label><input type="checkbox" class="subject-chk" value="MAPEH"> MAPEH</label>
+                    </div>
+                </div>
+
+                <p id="signupError"></p>
+
+                <button id="signupButton">Sign Up</button>
+            </div>
+
+            <div class="toggle-container">
+                <button class="toggle-btn" id="toggleBtn">Don't have an account? Sign Up</button>
+            </div>
 
         </div>
 
@@ -44,29 +150,160 @@
 </div>
 
 <script>
-    
+    // Create default admin account if no users exist
+    $(document).ready(function() {
+        var users = JSON.parse(localStorage.getItem("users") || "{}");
+        
+        // If no users exist, create a default admin account
+        if(Object.keys(users).length === 0) {
+            users["ADMIN001"] = {
+                accountId: "ADMIN001",
+                firstName: "Admin",
+                lastName: "User",
+                password: "admin123",
+                role: "Administrator",
+                subjects: [],
+                createdAt: new Date().toISOString()
+            };
+            localStorage.setItem("users", JSON.stringify(users));
+            console.log("Default admin account created: ADMIN001 / admin123");
+        }
+    });
 
- const loginButton = document.querySelector("#loginButton");
+    // Toggle between Login and Sign Up
+    let isLogin = true;
 
-    loginButton.addEventListener("click", function(){
-        window.location.href = "admin.html";
-    })
+    $("#toggleBtn").click(function() {
+        isLogin = !isLogin;
+        
+        if(isLogin) {
+            $("#formTitle").text("Login");
+            $("#loginForm").show();
+            $("#signupForm").removeClass("active");
+            $("#toggleBtn").text("Don't have an account? Sign Up");
+        } else {
+            $("#formTitle").text("Sign Up");
+            $("#loginForm").hide();
+            $("#signupForm").addClass("active");
+            $("#toggleBtn").text("Already have an account? Login");
+        }
+    });
 
+    // Show/hide subjects based on role in signup
+    $("#signupRole").change(function() {
+        var role = $(this).val();
+        if(role === "Student" || role === "Teacher") {
+            $("#subjectsSection").addClass("active");
+        } else {
+            $("#subjectsSection").removeClass("active");
+        }
+    });
 
-function changeRole(role){
-    const pages={
-        admin:"admin.html",
-        student:"student.html",
-        teacher:"teacher.html"
-    }
+    // Login Function
+    $("#loginButton").click(function() {
+        var accountId = $("#loginId").val().trim();
+        var password = $("#loginPassword").val().trim();
+        var role = $("#loginRole").val().trim();
 
-    if(pages[role]){
-        window.location.href=pages[role]
-    }
-}
+        if(!accountId || !password || !role) {
+            $("#loginError").text("Please fill in all fields!").show();
+            return;
+        }
 
- 
+        // Get users from localStorage
+        var users = JSON.parse(localStorage.getItem("users") || "{}");
+
+        // Check credentials
+        if(users[accountId] && users[accountId].password === password && users[accountId].role === role) {
+            $("#loginError").hide();
+            
+            // Store current logged in user
+            sessionStorage.setItem("currentUser", JSON.stringify(users[accountId]));
+
+            // Redirect based on role
+            if(role === "Administrator") {
+                window.location.href = "admin.html";
+            } else if(role === "Student") {
+                window.location.href = "student.html";
+            } else if(role === "Teacher") {
+                window.location.href = "teacher.html";
+            }
+        } else {
+            $("#loginError").text("Invalid credentials!").show();
+        }
+    });
+
+    // Sign Up Function
+    $("#signupButton").click(function() {
+        var accountId = $("#signupId").val().trim();
+        var firstName = $("#signupFirstName").val().trim();
+        var lastName = $("#signupLastName").val().trim();
+        var password = $("#signupPassword").val().trim();
+        var role = $("#signupRole").val().trim();
+
+        // Validation
+        if(!accountId || !firstName || !lastName || !password || !role) {
+            $("#signupError").text("Please fill in all fields!").show();
+            return;
+        }
+
+        // Get subjects
+        var subjects = [];
+        if(role === "Student" || role === "Teacher") {
+            $(".subject-chk:checked").each(function() {
+                subjects.push($(this).val());
+            });
+            
+            if(subjects.length < 3) {
+                $("#signupError").text("Please select at least 3 subjects!").show();
+                return;
+            }
+        }
+
+        // Get existing users
+        var users = JSON.parse(localStorage.getItem("users") || "{}");
+
+        // Check if accountId already exists
+        if(users[accountId]) {
+            $("#signupError").text("Account number already exists!").show();
+            return;
+        }
+
+        // Create new user object
+        users[accountId] = {
+            accountId: accountId,
+            firstName: firstName,
+            lastName: lastName,
+            password: password,
+            role: role,
+            subjects: subjects,
+            createdAt: new Date().toISOString()
+        };
+
+        // Save to localStorage
+        localStorage.setItem("users", JSON.stringify(users));
+
+        // Clear form and switch to login
+        $("#signupId").val("");
+        $("#signupFirstName").val("");
+        $("#signupLastName").val("");
+        $("#signupPassword").val("");
+        $("#signupRole").val("");
+        $(".subject-chk").prop("checked", false);
+        $("#subjectsSection").removeClass("active");
+        $("#signupError").hide();
+
+        alert("Account created successfully! Please login.");
+        
+        // Switch to login
+        isLogin = true;
+        $("#formTitle").text("Login");
+        $("#loginForm").show();
+        $("#signupForm").removeClass("active");
+        $("#toggleBtn").text("Don't have an account? Sign Up");
+    });
 </script>
 
 </body>
 </html>
+
