@@ -1,47 +1,63 @@
 class User {
+
     #password;
 
-    constructor(accountId, firstName, lastName, password, role) {
+    constructor(accountId, firstName, lastName, password, role, subjects = []) {
+
         this.accountId = accountId;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.password = password;
+        this.#password = password;
         this.role = role;
+        this.subjects = subjects;
         this.createdAt = new Date().toISOString();
     }
 
-    get fullname() {
+    get fullName() {
         return `${this.firstName} ${this.lastName}`;
     }
 
-    getProfle() {
-        return {
-            id: this.id,
-            fullName: this.fullname,
-            role: this.role,
-            createdAt: this.createdAt,
-        };
-    }
-
     save() {
+
         const users = User.getAllFromStorage();
+
+        users[this.accountId] = this;
+
         localStorage.setItem("users", JSON.stringify(users));
-        console.log(`${this.role} "${this.fullName}" saved.`);
+
+        return true;
     }
 
     delete() {
+
         const users = User.getAllFromStorage();
-        delete users[this.accountID];
+
+        delete users[this.accountId];
+
         localStorage.setItem("users", JSON.stringify(users));
-        console.log(`${this.role} "${this.fullName}" saved.`);
     }
 
     static getAllFromStorage() {
         return JSON.parse(localStorage.getItem("users") || "{}");
     }
 
-    toString() {
-        return `[${this.role}] ${this.fullname}`;
-    }
+    static search(query) {
 
+        const users = this.getAllFromStorage();
+
+        query = query.toLowerCase();
+
+        return Object.values(users).filter(u => {
+
+            const name = `${u.firstName} ${u.lastName}`.toLowerCase();
+
+            const subjects = (u.subjects || []).join(" ").toLowerCase();
+
+            return (
+                name.includes(query) ||
+                (u.role || "").toLowerCase().includes(query) ||
+                subjects.includes(query)
+            );
+        });
+    }
 }

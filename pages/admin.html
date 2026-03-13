@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KatapatanEagerGNC - Admin Dashboard</title>
-    <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../adminStyle.css">
+<link rel="stylesheet" href="../style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../Scripts/main.js"></script>
+    <script src="../Scripts/data.js"></script>
+    <script src="../Scripts/user.js"></script>
+    <script src="../Scripts/administrator.js"></script>
+    <script src="../Scripts/admin-dashboard.js"></script>
 </head>
+
 <body>
     <nav>
         <h3>KatapatanEagerGNC</h3>
@@ -21,28 +27,12 @@
                 <span>Welcome, Sir Janus</span>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="active">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                    Dashboard
-                </a>
-                <a href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    Manage Users
-                </a>
-                <a href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                    Courses
-                </a>
-                <a href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                    Reports
-                </a>
-                <a href="#">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                    Settings
-                </a>
-                <a href="introPage.html" style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1);">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <a href="#" class="active">Dashboard</a>
+                <a href="#">Manage Users</a>
+                <a href="#">Courses</a>
+                <a href="#">Reports</a>
+                <a href="#">Settings</a>
+                <a href="introPage.html" class="logout-link">
                     Logout
                 </a>
             </nav>
@@ -50,42 +40,36 @@
 
         <main class="admin-main">
             <div class="admin-header">
-                <h1>Dashboard</h1>
-                <p>Welcome back! Here's an overview of your learning management system.</p>
+                <h1>Admin Dashboard</h1>
+                <input type="text" id="globalSearch" placeholder="🔍 Search users/sections/grades..." class="search-input">
+                <p>Overview with search & reports.</p>
             </div>
+            <div id="searchResults" class="search-results" style="margin-bottom:20px;"></div>
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon students">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    </div>
+                    <div class="stat-icon students"></div>
                     <div class="stat-info">
                         <h3 id="studentCount">0</h3>
                         <p>Total Students</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon teachers">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                    </div>
+                    <div class="stat-icon teachers"></div>
                     <div class="stat-info">
                         <h3 id="teacherCount">0</h3>
                         <p>Teachers</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon courses">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                    </div>
+                    <div class="stat-icon courses"></div>
                     <div class="stat-info">
                         <h3 id="subjectCount">0</h3>
                         <p>Subjects</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon users">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-                    </div>
+                    <div class="stat-icon users"></div>
                     <div class="stat-info">
                         <h3 id="totalUsers">0</h3>
                         <p>Total Users</p>
@@ -93,12 +77,12 @@
                 </div>
             </div>
 
-            <div class="dashboard-grid" style="grid-template-columns: 1fr;">
+            <div class="dashboard-grid full-width-grid">
                 <!-- Teachers Table -->
                 <div class="card">
                     <div class="card-header">
                         <h2>Teachers</h2>
-                        <button id="openTeacherModalBtn" class="add-user-btn" style="margin:0; padding: 5px 15px; font-size: 0.85rem;">+ Add Teacher</button>
+                        <button id="openTeacherModalBtn" class="add-user-btn">+ Add Teacher</button>
                     </div>
                     <div class="card-body">
                         <div class="table-container">
@@ -121,7 +105,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h2>Students</h2>
-                        <button id="openStudentModalBtn" class="add-user-btn" style="margin:0; padding: 5px 15px; font-size: 0.85rem;">+ Add Student</button>
+                        <button id="openStudentModalBtn" class="add-user-btn">+ Add Student</button>
                     </div>
                     <div class="card-body">
                         <div class="table-container">
@@ -140,28 +124,65 @@
                     </div>
                 </div>
 
+                <!-- Sections Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Sections</h2>
+                        <button id="addSectionBtnGlobal" class="add-user-btn">+ Add Section</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="sectionsTableAdmin">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Teacher</th>
+                                    <th>Subject</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Reports Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Reports</h2>
+                        <button onclick="exportReport('studentGrades', 'grades.csv')" class="add-user-btn">Export Grades</button>
+                        <button onclick="exportReport('attendance', 'attendance.csv')" class="add-user-btn">Export Attendance</button>
+                    </div>
+                    <div id="reportsPreview">
+                        <div id="gradesPreview" class="table-container" style="margin-top:15px;">
+                            <table id="gradesReportTable" border="1" style="width:100%; border-collapse: collapse; text-align:center;">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Subject</th>
+                                        <th>Prelim</th>
+                                        <th>Midterm</th>
+                                        <th>Finals</th>
+                                        <th>Final Avg</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
                 <div class="card">
                     <div class="card-header">
                         <h2>Quick Actions</h2>
                     </div>
                     <div class="card-body">
                         <div class="action-grid">
-                            <button class="action-btn" id="quickAddStudent">
-                                <span>+</span>
-                                <small>Quick Add Student</small>
-                            </button>
-                            <button class="action-btn" id="quickAddTeacher">
-                                <span>+</span>
-                                <small>Quick Add Teacher</small>
-                            </button>
-                            <button class="action-btn">
-                                <span>📚</span>
-                                <small>View Subjects</small>
-                            </button>
-                            <button class="action-btn" id="clearAllData">
-                                <span>🗑️</span>
-                                <small>Clear All Data</small>
-                            </button>
+                            <button class="action-btn" id="quickAddStudent"><span>+</span><small>Quick Add Student</small></button>
+                            <button class="action-btn" id="quickAddTeacher"><span>+</span><small>Quick Add Teacher</small></button>
+                            <button class="action-btn" onclick="routeTo('reports')"><span>📊</span><small>Full Reports</small></button>
+                            <button class="action-btn" id="clearAllData"><span>🗑️</span><small>Clear All Data</small></button>
                         </div>
                     </div>
                 </div>
@@ -169,23 +190,23 @@
         </main>
     </div>
 
-    <!-- MODAL -->
+    <!-- User Modal -->
     <div id="userModal" class="modal">
         <div class="modal-content">
-            <span class="closeBtn">&times;</span>
+    <span class="close-btn">&times;</span>
             <h2 id="modalTitle">Add User</h2>
             <div class="modal-form">
-                <input type="text" id="accountId" placeholder="Account ID (Student/Teacher Number)">
+                <input type="text" id="accountId" placeholder="Account ID">
                 <input type="text" id="firstName" placeholder="First Name">
                 <input type="text" id="lastName" placeholder="Last Name">
                 <input type="password" id="password" placeholder="Password">
-<select id="userRole">
+                <select id="userRole">
                     <option value="">Select Role</option>
                     <option value="Student">Student</option>
                     <option value="Teacher">Teacher</option>
                     <option value="Administrator">Administrator</option>
                 </select>
-                <div id="subjectsSection" style="display:none;">
+                <div id="subjectsSection" class="subjects-section">
                     <label>Subjects (select at least 3):</label>
                     <div class="subjects-checkboxes">
                         <label><input type="checkbox" class="subject-chk" value="Mathematics"> Mathematics</label>
@@ -201,401 +222,91 @@
         </div>
     </div>
 
-    <style>
-        .add-user-btn {
-            padding: 10px 20px;
-            background: var(--burnt-peach);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        .add-user-btn:hover { background: #c55a35; }
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 25px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .modal-content h2 {
-            color: var(--blue-slate);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .closeBtn {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .closeBtn:hover { color: #000; }
-
-        .modal-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .modal-form input,
-        .modal-form select {
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .modal-form input:focus,
-        .modal-form select:focus {
-            outline: none;
-            border-color: var(--burnt-peach);
-        }
-
-        .modal-form button {
-            padding: 12px;
-            background: var(--burnt-peach);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .modal-form button:hover { background: #c55a35; }
-
-        #subjectsSection {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        #subjectsSection label {
-            font-weight: 600;
-            color: var(--blue-slate);
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .subjects-checkboxes {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .subjects-checkboxes label {
-            font-weight: normal;
-            color: #333;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .subjects-checkboxes input[type="checkbox"] {
-            width: auto;
-        }
-    </style>
 
     <script>
         let selectedAccountId = null;
         let isEditing = false;
-        let currentModalRole = "";
 
-        // Show/hide subjects based on role
-        $("#userRole").change(function() {
-            var role = $(this).val();
-            if(role === "Student" || role === "Teacher") {
-                $("#subjectsSection").slideDown();
-            } else {
-                $("#subjectsSection").slideUp();
-            }
+        $("#userRole").change(function () {
+            let role = $(this).val();
+            if (role === "Student" || role === "Teacher") $("#subjectsSection").slideDown();
+            else $("#subjectsSection").slideUp();
         });
 
-        // Open Teacher Modal
-        $("#openTeacherModalBtn").click(function() {
-            isEditing = false;
-            selectedAccountId = null;
-            currentModalRole = "Teacher";
-            $("#modalTitle").text("Add Teacher");
-            clearModalInputs();
-            $("#userRole").val("Teacher").trigger("change");
-            $("#userModal").fadeIn();
-        });
+        $(".closeBtn").click(() => $("#userModal").fadeOut());
+        $(window).click(e => { if (e.target.id === "userModal") $("#userModal").fadeOut(); });
 
-        // Open Student Modal
-        $("#openStudentModalBtn").click(function() {
-            isEditing = false;
-            selectedAccountId = null;
-            currentModalRole = "Student";
-            $("#modalTitle").text("Add Student");
-            clearModalInputs();
-            $("#userRole").val("Student").trigger("change");
-            $("#userModal").fadeIn();
-        });
+        function getAllUsers() { return JSON.parse(localStorage.getItem("users") || "{}"); }
+        function saveAllUsers(users) { localStorage.setItem("users", JSON.stringify(users)); }
 
-        // Quick Add Student
-        $("#quickAddStudent").click(function() {
-            isEditing = false;
-            selectedAccountId = null;
-            currentModalRole = "Student";
-            $("#modalTitle").text("Add Student");
-            clearModalInputs();
-            $("#userRole").val("Student").trigger("change");
-            $("#userModal").fadeIn();
-        });
-
-        // Quick Add Teacher
-        $("#quickAddTeacher").click(function() {
-            isEditing = false;
-            selectedAccountId = null;
-            currentModalRole = "Teacher";
-            $("#modalTitle").text("Add Teacher");
-            clearModalInputs();
-            $("#userRole").val("Teacher").trigger("change");
-            $("#userModal").fadeIn();
-        });
-
-        // Close Modal
-        $(".closeBtn").click(function() {
-            $("#userModal").fadeOut();
-        });
-
-        $(window).click(function(e) {
-            if(e.target.id === "userModal") {
-                $("#userModal").fadeOut();
-            }
-        });
-
-        // Clear All Data
-        $("#clearAllData").click(function() {
-            if(confirm("Are you sure you want to clear ALL data? This cannot be undone!")) {
-                localStorage.clear();
-                displayUsers();
-                updateStats();
-                alert("All data cleared!");
-            }
-        });
-
-        // Save User (Add or Update)
-        $("#saveUserBtn").click(function() {
-            if(isEditing) {
-                updateUser();
-            } else {
-                addUser();
-            }
-        });
-
-        // Load users on page load
-        $(document).ready(function() {
-            displayUsers();
-        });
-
-function getAllUsers() {
-            return JSON.parse(localStorage.getItem("users") || "{}");
-        }
-
-        function saveAllUsers(users) {
-            localStorage.setItem("users", JSON.stringify(users));
-        }
+        $("#saveUserBtn").click(function () { isEditing ? updateUser() : addUser(); });
 
         function addUser() {
-            var accountId = $("#accountId").val().trim();
-            var firstName = $("#firstName").val().trim();
-            var lastName = $("#lastName").val().trim();
-            var password = $("#password").val().trim();
-            var role = $("#userRole").val().trim();
+            let accountId = $("#accountId").val().trim();
+            let firstName = $("#firstName").val().trim();
+            let lastName = $("#lastName").val().trim();
+            let password = $("#password").val().trim();
+            let role = $("#userRole").val();
+            if (!accountId || !firstName || !lastName || !password || !role) return alert("Complete all fields");
 
-            if(!accountId || !firstName || !lastName || !password || !role) {
-                alert("Please fill in all fields!");
-                return;
+            let subjects = [];
+            if (role === "Student" || role === "Teacher") {
+                $(".subject-chk:checked").each(function () { subjects.push($(this).val()); });
+                if (subjects.length < 3) return alert("Select at least 3 subjects");
             }
 
-            var subjects = [];
-            if(role === "Student" || role === "Teacher") {
-                $(".subject-chk:checked").each(function() {
-                    subjects.push($(this).val());
-                });
-                
-                if(subjects.length < 3) {
-                    alert("Please select at least 3 subjects!");
-                    return;
-                }
-            }
+            let users = getAllUsers();
+            if (users[accountId]) return alert("Account already exists");
 
-            var users = getAllUsers();
-
-            if(users[accountId]) {
-                alert("Account ID already exists!");
-                return;
-            }
-
-            users[accountId] = {
-                accountId: accountId,
-                firstName: firstName,
-                lastName: lastName,
-                password: password,
-                role: role,
-                subjects: subjects,
-                createdAt: new Date().toISOString()
-            };
-
+            users[accountId] = { accountId, firstName, lastName, fullName: firstName + " " + lastName, password, role, subjects, createdAt: new Date().toISOString() };
             saveAllUsers(users);
             $("#userModal").fadeOut();
-            clearModalInputs();
             displayUsers();
+            clearModalInputs();
         }
 
         function displayUsers() {
-            var users = getAllUsers();
-            var teacherTbody = $("#teacherTable tbody");
-            var studentTbody = $("#studentTable tbody");
-            
-            teacherTbody.empty();
-            studentTbody.empty();
-
-            $.each(users, function(accountId, user) {
-                var subjectsDisplay = user.subjects ? user.subjects.join(", ") : "-";
-                var fullName = user.firstName + " " + user.lastName;
-
-                var row = $("<tr></tr>");
-                row.html(
-                    '<td>' + user.accountId + '</td>' +
-                    '<td>' + fullName + '</td>' +
-                    '<td>' + subjectsDisplay + '</td>' +
-                    '<td>' +
-                        '<button class="btn-sm btn-outline editBtn" data-id="' + accountId + '">Edit</button> ' +
-                        '<button class="btn-sm btn-outline deleteBtn" data-id="' + accountId + '">Delete</button>' +
-                    '</td>'
-                );
-
-                row.find(".editBtn").click(function() {
-                    editUser($(this).data("id"));
-                });
-
-                row.find(".deleteBtn").click(function() {
-                    deleteUser($(this).data("id"));
-                });
-
-                if(user.role === "Teacher") {
-                    teacherTbody.append(row);
-                } else if(user.role === "Student") {
-                    studentTbody.append(row);
-                }
+            let users = getAllUsers();
+            let teacherBody = $("#teacherTable tbody");
+            let studentBody = $("#studentTable tbody");
+            teacherBody.empty();
+            studentBody.empty();
+            Object.values(users).forEach(user => {
+                let row = `<tr>
+<td>${user.accountId}</td>
+<td>${user.firstName} ${user.lastName}</td>
+<td>${user.subjects ? user.subjects.join(", ") : "-"}</td>
+<td>
+<button class="btn-sm editBtn" data-id="${user.accountId}">Edit</button>
+<button class="btn-sm deleteBtn" data-id="${user.accountId}">Delete</button>
+</td>
+</tr>`;
+                if (user.role === "Teacher") teacherBody.append(row);
+                if (user.role === "Student") studentBody.append(row);
             });
 
+            $(".editBtn").click(function () { editUser($(this).data("id")); });
+            $(".deleteBtn").click(function () { deleteUser($(this).data("id")); });
             updateStats();
+            loadGradesPreview();
         }
 
-        function editUser(accountId) {
-            var users = getAllUsers();
-            var user = users[accountId];
-
-            if(!user) return;
-
-            selectedAccountId = accountId;
-            isEditing = true;
-            currentModalRole = user.role;
-            $("#modalTitle").text("Edit " + user.role);
-
-            $("#accountId").val(user.accountId);
-            $("#firstName").val(user.firstName);
-            $("#lastName").val(user.lastName);
-            $("#password").val(user.password);
-            $("#userRole").val(user.role).trigger("change");
-
-            $(".subject-chk").prop("checked", false);
-            if(user.subjects) {
-                $.each(user.subjects, function(i, subject) {
-                    $(".subject-chk[value='" + subject + "']").prop("checked", true);
-                });
-            }
-
-            $("#userModal").fadeIn();
+        function updateStats() {
+            let users = getAllUsers();
+            let student = 0, teacher = 0, subjects = [];
+            Object.values(users).forEach(u => {
+                if (u.role === "Student") student++;
+                if (u.role === "Teacher") teacher++;
+                if (u.subjects) u.subjects.forEach(s => { if (!subjects.includes(s)) subjects.push(s); });
+            });
+            $("#studentCount").text(student);
+            $("#teacherCount").text(teacher);
+            $("#subjectCount").text(subjects.length);
+            $("#totalUsers").text(Object.keys(users).length);
         }
 
-        function updateUser() {
-            var accountId = selectedAccountId;
-            if(!accountId) return;
-
-            var newAccountId = $("#accountId").val().trim();
-            var firstName = $("#firstName").val().trim();
-            var lastName = $("#lastName").val().trim();
-            var password = $("#password").val().trim();
-            var role = $("#userRole").val().trim();
-
-            if(!newAccountId || !firstName || !lastName || !password || !role) {
-                alert("Please fill in all fields!");
-                return;
-            }
-
-            var subjects = [];
-            if(role === "Student" || role === "Teacher") {
-                $(".subject-chk:checked").each(function() {
-                    subjects.push($(this).val());
-                });
-                
-                if(subjects.length < 3) {
-                    alert("Please select at least 3 subjects!");
-                    return;
-                }
-            }
-
-            var users = getAllUsers();
-
-            if(accountId !== newAccountId) {
-                if(users[newAccountId]) {
-                    alert("New Account ID already exists!");
-                    return;
-                }
-                delete users[accountId];
-            }
-
-            users[newAccountId] = {
-                accountId: newAccountId,
-                firstName: firstName,
-                lastName: lastName,
-                password: password,
-                role: role,
-                subjects: subjects,
-                createdAt: users[accountId] ? users[accountId].createdAt : new Date().toISOString()
-            };
-
-            saveAllUsers(users);
-            selectedAccountId = null;
-            isEditing = false;
-            $("#userModal").fadeOut();
-            clearModalInputs();
-            displayUsers();
-        }
-
-        function deleteUser(accountId) {
-            if(confirm("Are you sure you want to delete this user?")) {
-                var users = getAllUsers();
-                delete users[accountId];
-                saveAllUsers(users);
-                displayUsers();
-            }
-        }
+        $("#clearAllData").click(() => { if (confirm("Clear all data?")) { localStorage.removeItem("users"); localStorage.removeItem("grades"); localStorage.removeItem("sections"); location.reload(); } });
 
         function clearModalInputs() {
             $("#accountId").val("");
@@ -607,30 +318,73 @@ function getAllUsers() {
             $("#subjectsSection").hide();
         }
 
-        function updateStats() {
-            var users = getAllUsers();
-            var studentCount = 0;
-            var teacherCount = 0;
-            var allSubjects = [];
+        // ---------------------- Grades Preview ----------------------
+        function loadGradesPreview() {
+            let users = JSON.parse(localStorage.getItem("users") || "{}");
+            let tbody = $("#gradesReportTable tbody");
+            tbody.empty();
 
-            $.each(users, function(accountId, user) {
-                if(user.role === "Student") studentCount++;
-                if(user.role === "Teacher") teacherCount++;
-                if(user.subjects) {
-                    $.each(user.subjects, function(i, sub) {
-                        if(allSubjects.indexOf(sub) === -1) {
-                            allSubjects.push(sub);
-                        }
-                    });
-                }
+            Object.values(users).filter(u => u.role === "Student").forEach(student => {
+                let grades = student.grades || {};
+                Object.keys(grades).forEach(subject => {
+                    let g = grades[subject] || { prelim: null, midterm: null, finals: null };
+                    let prelim = g.prelim != null ? g.prelim : "--";
+                    let midterm = g.midterm != null ? g.midterm : "--";
+                    let finals = g.finals != null ? g.finals : "--";
+                    let numericGrades = [g.prelim, g.midterm, g.finals].filter(x => x != null);
+                    let finalAvg = numericGrades.length ? (numericGrades.reduce((a,b)=>a+b,0)/numericGrades.length).toFixed(2) : "--";
+                    let status = finalAvg === "--" ? "--" : (finalAvg >= 75 ? "Passed" : "Failed");
+                    tbody.append(`<tr>
+<td>${student.firstName} ${student.lastName}</td>
+<td>${subject}</td>
+<td>${prelim}</td>
+<td>${midterm}</td>
+<td>${finals}</td>
+<td>${finalAvg}</td>
+<td>${status}</td>
+</tr>`);
+                });
             });
-
-            $("#studentCount").text(studentCount);
-            $("#teacherCount").text(teacherCount);
-            $("#subjectCount").text(allSubjects.length);
-            $("#totalUsers").text(Object.keys(users).length);
         }
+
+        function exportReport(type, filename) {
+            if (type === "studentGrades") {
+                let csv = "Student,Subject,Prelim,Midterm,Finals,Final Avg,Status\n";
+                let users = JSON.parse(localStorage.getItem("users") || "{}");
+                Object.values(users).filter(u => u.role === "Student").forEach(student => {
+                    let grades = student.grades || {};
+                    Object.keys(grades).forEach(subject => {
+                        let g = grades[subject] || { prelim: null, midterm: null, finals: null };
+                        let prelim = g.prelim != null ? g.prelim : "--";
+                        let midterm = g.midterm != null ? g.midterm : "--";
+                        let finals = g.finals != null ? g.finals : "--";
+                        let numericGrades = [g.prelim, g.midterm, g.finals].filter(x => x != null);
+                        let finalAvg = numericGrades.length ? (numericGrades.reduce((a,b)=>a+b,0)/numericGrades.length).toFixed(2) : "--";
+                        let status = finalAvg === "--" ? "--" : (finalAvg >= 75 ? "Passed" : "Failed");
+                        csv += `${student.firstName} ${student.lastName},${subject},${prelim},${midterm},${finals},${finalAvg},${status}\n`;
+                    });
+                });
+                downloadCSV(csv, filename);
+            }
+            if (type === "attendance") { /* keep your attendance export */ }
+        }
+
+        function downloadCSV(csv, filename) {
+            let blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+            let link = document.createElement("a");
+            if (link.download !== undefined) {
+                let url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = "hidden";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        displayUsers();
     </script>
 </body>
-</html>
 
+</html>
