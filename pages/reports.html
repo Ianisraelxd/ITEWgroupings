@@ -1,188 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>KatapatanEagerGNC - Reports</title>
+    <title>KatapatanEagerGNC - Reports</title>
 
-<link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../style.css">
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="../Scripts/main.js"></script>
-<script src="../Scripts/data.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../Scripts/main.js"></script>
+    <script src="../Scripts/data.js"></script>
 
 
 </head>
 
 <body>
 
-<nav>
-<h3>KatapatanEagerGNC</h3>
-<a href="admin.html">Admin</a>
-<a href="#" onclick="logout()">Logout</a>
-</nav>
+    <nav>
+        <h3>KatapatanEagerGNC</h3>
+        <a href="admin.html">Admin</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </nav>
 
-<div class="container" style="max-width:1200px;margin:0 auto;padding:40px;">
+    <div class="container" style="max-width:1200px;margin:0 auto;padding:40px;">
 
-<h1>Reports & Analytics</h1>
+        <h1>Reports & Analytics</h1>
 
-<div class="stats-grid">
+        <div class="stats-grid">
 
-<div class="stat-card">
-<h3 id="totalGrades">0</h3>
-<p>Total Grades</p>
-</div>
+            <div class="stat-card">
+                <h3 id="totalGrades">0</h3>
+                <p>Total Grades</p>
+            </div>
 
-<div class="stat-card">
-<h3 id="avgSchoolGrade">0</h3>
-<p>Average School Grade</p>
-</div>
+            <div class="stat-card">
+                <h3 id="avgSchoolGrade">0</h3>
+                <p>Average School Grade</p>
+            </div>
 
-<div class="stat-card">
-<h3 id="totalSections">0</h3>
-<p>Total Sections</p>
-</div>
+            <div class="stat-card">
+                <h3 id="totalSections">0</h3>
+                <p>Total Sections</p>
+            </div>
 
-</div>
+        </div>
 
-<div class="dashboard-grid">
+        <div class="dashboard-grid">
 
-<!-- Grades Report -->
-<div class="card">
+            <!-- Grades Report -->
+            <div class="card">
 
-<div class="card-header">
-<h2>Student Grades Report</h2>
-<button onclick="exportReport('studentGrades','grades-report.csv')" class="add-user-btn">
-📥 Export CSV
-</button>
-</div>
+                <div class="card-header">
+                    <h2>Student Grades Report</h2>
+                    <button onclick="exportReport('studentGrades','grades-report.csv')" class="add-user-btn">
+                        📥 Export CSV
+                    </button>
+                </div>
 
-<div class="table-container">
+                <div class="table-container">
 
-<table id="gradesReportTable">
+                    <table id="gradesReportTable">
 
-<thead>
-<tr>
-<th>Student</th>
-<th>Subject</th>
-<th>Grade</th>
-<th>Average</th>
-</tr>
-</thead>
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Subject</th>
+                                <th>Grade</th>
+                                <th>Average</th>
+                            </tr>
+                        </thead>
 
-<tbody></tbody>
+                        <tbody></tbody>
 
-</table>
+                    </table>
 
-</div>
+                </div>
 
-</div>
+            </div>
 
-<!-- Attendance Report -->
-<div class="card">
+            <!-- Attendance Report -->
+            <div class="card">
 
-<div class="card-header">
-<h2>Attendance Report</h2>
-<button onclick="exportReport('attendance','attendance-report.csv')" class="add-user-btn">
-📥 Export CSV
-</button>
-</div>
+                <div class="card-header">
+                    <h2>Attendance Report</h2>
+                    <button onclick="exportReport('attendance','attendance-report.csv')" class="add-user-btn">
+                        📥 Export CSV
+                    </button>
+                </div>
 
-<div id="attendancePreview"></div>
+                <div id="attendancePreview"></div>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
-<script>
+    <script>
 
-$(document).ready(function(){
+        $(document).ready(function () {
 
-if(!checkRole('Administrator')) return;
+            if (!checkRole('Administrator')) return;
 
-loadReports();
+            loadReports();
 
-});
+        });
 
-function loadReports(){
+        function loadReports() {
 
-const gradesReport = DataManager.generateReport('studentGrades') || [];
-const tbody = $('#gradesReportTable tbody');
+            const gradesReport = DataManager.generateReport('studentGrades') || [];
+            const tbody = $('#gradesReportTable tbody');
 
-tbody.empty();
+            tbody.empty();
 
-let totalGrades = 0;
-let sumGrades = 0;
+            let totalGrades = 0;
+            let sumGrades = 0;
 
-if(gradesReport.length === 0){
+            if (gradesReport.length === 0) {
 
-tbody.append("<tr><td colspan='4'>No grade records available</td></tr>");
+                tbody.append("<tr><td colspan='4'>No grade records available</td></tr>");
 
-}else{
+            } else {
 
-gradesReport.forEach(g => {
+                gradesReport.forEach(g => {
 
-const grade = parseFloat(g.grade) || 0;
+                    const grade = parseFloat(g.grade) || 0;
 
-tbody.append(`
-<tr>
-<td>${g.student || '-'}</td>
-<td>${g.subject || '-'}</td>
-<td>${grade}</td>
-<td>${g.average || '-'}</td>
-</tr>
-`);
+                    tbody.append(`
+                                    <tr>
+                                    <td>${g.student || '-'}</td>
+                                    <td>${g.subject || '-'}</td>
+                                    <td>${grade}</td>
+                                    <td>${g.average || '-'}</td>
+                                    </tr>
+                                    `);
 
-totalGrades++;
-sumGrades += grade;
+                    totalGrades++;
+                    sumGrades += grade;
 
-});
+                });
 
-}
+            }
 
-$('#totalGrades').text(totalGrades);
+            $('#totalGrades').text(totalGrades);
 
-const average = totalGrades ? (sumGrades / totalGrades).toFixed(2) : "0";
+            const average = totalGrades ? (sumGrades / totalGrades).toFixed(2) : "0";
 
-$('#avgSchoolGrade').text(average);
+            $('#avgSchoolGrade').text(average);
 
 
-/* Attendance Report */
+            /* Attendance Report */
 
-const attendance = DataManager.getAll('ATTENDANCE') || [];
+            const attendance = DataManager.getAll('ATTENDANCE') || [];
 
-if(attendance.length === 0){
+            if (attendance.length === 0) {
 
-$('#attendancePreview').html("<p>No attendance records available</p>");
+                $('#attendancePreview').html("<p>No attendance records available</p>");
 
-}else{
+            } else {
 
-const latest = attendance.slice(-10).reverse();
+                const latest = attendance.slice(-10).reverse();
 
-$('#attendancePreview').html(
+                $('#attendancePreview').html(
 
-`<p><strong>Total Records:</strong> ${attendance.length}</p>` +
+                    `<p><strong>Total Records:</strong> ${attendance.length}</p>` +
 
-latest.map(a =>
-`<p>${a.date || '-'} : ${a.status || '-'}</p>`
-).join("")
+                    latest.map(a =>
+                        `<p>${a.date || '-'} : ${a.status || '-'}</p>`
+                    ).join("")
 
-);
+                );
 
-}
+            }
 
-/* Sections */
+            /* Sections */
 
-const sections = DataManager.getAll('SECTIONS') || [];
+            const sections = DataManager.getAll('SECTIONS') || [];
 
-$('#totalSections').text(sections.length);
+            $('#totalSections').text(sections.length);
 
-}
+        }
 
-</script>
+    </script>
 
 </body>
+
 </html>

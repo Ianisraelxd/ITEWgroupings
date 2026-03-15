@@ -78,6 +78,7 @@ function showNotification(message, type = "success") {
     }, 3000);
 }
 
+// dummy datas
 function initDummyData() {
 
     if (!localStorage.getItem("users")) {

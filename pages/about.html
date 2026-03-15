@@ -3,20 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - KatapatanEagerGNC LMS</title>
+    <title>About — KatapatanEagerGNC LMS</title>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+
     <nav>
         <h3>KatapatanEagerGNC</h3>
-        <a href="introPage.html">Home</a>
+        <div class="nav-links">
+            <a href="introPage.html">← Back to Login</a>
+        </div>
     </nav>
-    <div class="container">
-        <main class="admin-main">
-            <h1>About KatapatanEagerGNC LMS</h1>
-            <p>Student Record Management System built with JavaScript OOP, jQuery, localStorage.</p>
+
+    <div class="admin-layout" style="min-height: calc(100vh - 64px);">
+        <main class="admin-main" style="display:flex; align-items:flex-start; justify-content:flex-start;">
+            <div style="max-width:640px; animation: fadeUp 0.5s var(--ease-out);">
+                <div style="margin-bottom: 32px;">
+                    <p style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--coral);font-family:'Sora',sans-serif;margin-bottom:8px;">
+                        About the System
+                    </p>
+                    <h1 style="font-size:2.2rem;font-weight:800;color:var(--navy);letter-spacing:-0.03em;margin-bottom:16px;">
+                        KatapatanEagerGNC LMS
+                    </h1>
+                    <p style="color:var(--text-muted);font-size:1rem;line-height:1.75;">
+                        A Student Record Management System built with vanilla JavaScript using Object-Oriented Programming principles, jQuery, and localStorage for persistent data — no backend required.
+                    </p>
+                </div>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px;">
+                    <div style="background:white;border-radius:14px;padding:20px;border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+                        <div style="font-family:'Sora',sans-serif;font-weight:700;color:var(--navy);margin-bottom:4px;">Students</div>
+                        <div style="font-size:0.85rem;color:var(--text-muted);">View grades and academic standing per subject.</div>
+                    </div>
+                    <div style="background:white;border-radius:14px;padding:20px;border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+                        <div style="font-family:'Sora',sans-serif;font-weight:700;color:var(--navy);margin-bottom:4px;">Teachers</div>
+                        <div style="font-size:0.85rem;color:var(--text-muted);">Add subjects and input grades per student per period.</div>
+                    </div>
+                    <div style="background:white;border-radius:14px;padding:20px;border:1px solid var(--border);box-shadow:var(--shadow-sm);">
+                        <div style="font-family:'Sora',sans-serif;font-weight:700;color:var(--navy);margin-bottom:4px;">Admins</div>
+                        <div style="font-size:0.85rem;color:var(--text-muted);">Manage all users, sections, and export reports.</div>
+                    </div>
+                </div>
+
+                <div style="background:var(--surface-2);border-radius:14px;padding:20px;border:1px solid var(--border);">
+                    <p style="font-family:'Sora',sans-serif;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:10px;">Default Login</p>
+                    <p style="font-size:0.9rem;color:var(--text-main);">
+                        Admin ID: <code style="background:white;padding:2px 8px;border-radius:6px;font-family:monospace;border:1px solid var(--border-mid);">ADMIN001</code>
+                        &nbsp;&nbsp;
+                        Password: <code style="background:white;padding:2px 8px;border-radius:6px;font-family:monospace;border:1px solid var(--border-mid);">admin123</code>
+                    </p>
+                </div>
+            </div>
         </main>
     </div>
+
 </body>
 </html>
-

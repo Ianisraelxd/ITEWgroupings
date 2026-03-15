@@ -1,74 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard</title>
-
-<link rel="stylesheet" href="../style.css">
-
+    <title>Teacher Dashboard — KatapatanEagerGNC</title>
+    <link rel="stylesheet" href="../style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../Scripts/main.js"></script>
     <script src="../Scripts/data.js"></script>
     <script src="../Scripts/user.js"></script>
     <script src="../Scripts/teacher.js"></script>
 </head>
-
 <body>
 
     <nav>
         <h3>KatapatanEagerGNC</h3>
-        <a href="about.html">About</a>
-        <a href="#" onclick="logout()">Logout</a>
+        <div class="nav-links">
+            <a href="introPage.html" class="nav-logout" onclick="logout(); return false;">Logout</a>
+        </div>
     </nav>
 
     <div class="admin-layout">
 
+        <!-- ── Sidebar ── -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h3>Teacher Panel</h3>
                 <span class="welcome-user"></span>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="active">Dashboard</a>
-                <a href="#">Sections</a>
-                <a href="#">Grades</a>
+                <a href="#grades-input" class="active">
+                     Input Grades
+                </a>
             </nav>
         </aside>
 
+        <!-- ── Main ── -->
         <main class="admin-main">
 
             <div class="admin-header">
                 <h1>Teacher Dashboard</h1>
-                <button id="addSubjectBtn">Add Subject</button>
-                <input type="text" id="searchInput" placeholder="Search students">
+                <p>Add subjects and input grades for your students.</p>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; width:100%;">
+                    <button id="addSubjectBtn" class="btn-outline btn-sm" style="white-space:nowrap;">
+                        ＋ Add Subject
+                    </button>
+                    <input type="text" id="searchInput" placeholder="Search students…" class="search-input"
+                        style="flex:1; min-width:140px;">
+                </div>
             </div>
 
-            <div class="card">
+            <!-- Input Grades Card -->
+            <div class="card" id="grades-input" style="margin-bottom:var(--sp-lg);">
                 <div class="card-header">
                     <h2>Input Grades</h2>
                 </div>
                 <div class="card-body">
-                    <select id="studentSelect"></select>
-                    <select id="subjectSelect"></select>
-                    <select id="periodSelect">
-                        <option value="prelim">Prelim</option>
-                        <option value="midterm">Midterm</option>
-                        <option value="finals">Finals</option>
-                    </select>
-                    <input type="number" id="gradeInput" placeholder="Grade">
-                    <button id="addGradeBtn">Add Grade</button>
+                    <div class="field">
+                        <label class="field-label">Student</label>
+                        <select id="studentSelect"></select>
+                    </div>
+                    <div class="field">
+                        <label class="field-label">Subject</label>
+                        <select id="subjectSelect"></select>
+                    </div>
+                    <div class="field">
+                        <label class="field-label">Period</label>
+                        <select id="periodSelect">
+                            <option value="prelim">Prelim</option>
+                            <option value="midterm">Midterm</option>
+                            <option value="finals">Finals</option>
+                        </select>
+                    </div>
+                    <div class="field" style="max-width:130px;">
+                        <label class="field-label">Grade (0–100)</label>
+                        <input type="number" id="gradeInput" placeholder="e.g. 88" min="0" max="100">
+                    </div>
+                    <div class="field-action">
+                        <button id="addGradeBtn">Save Grade</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="card">
+            <!-- Grades Overview Card -->
+            <div class="card" id="grades-overview">
                 <div class="card-header">
                     <h2>Grades Overview</h2>
+                    <span id="rowCount" style="font-size:0.8rem;color:var(--text-muted);"></span>
                 </div>
                 <div class="table-container">
-                    <table id="gradesTable" border="1"
-                        style="width:100%; border-collapse: collapse; text-align:center;">
+                    <table id="gradesTable">
                         <thead>
                             <tr>
                                 <th>Student</th>
@@ -76,11 +97,17 @@
                                 <th>Prelim</th>
                                 <th>Midterm</th>
                                 <th>Finals</th>
-                                <th>Final Avg</th>
+                                <th>Avg</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="text-align:center;color:var(--text-muted);padding:28px;">
+                                    Loading…
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -89,12 +116,22 @@
     </div>
 
     <script>
+        /* sortBy must exist or the grade table crashes all buttons */
+        let sortBy = 'name';
+
         $(function () {
             if (!checkRole("Teacher")) return;
 
             loadTeacherData();
             $("#addGradeBtn").click(addGrade);
             $("#addSubjectBtn").click(addSubject);
+
+            $("#searchInput").on("input", function () {
+                const val = $(this).val().toLowerCase();
+                $("#gradesTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().includes(val));
+                });
+            });
         });
 
         function loadTeacherData() {
@@ -104,96 +141,166 @@
         }
 
         function populateStudents() {
-            let users = JSON.parse(localStorage.getItem("users") || "{}");
-            let students = Object.values(users).filter(u => u.role === "Student");
-            let select = $("#studentSelect");
+            const users    = JSON.parse(localStorage.getItem("users") || "{}");
+            const students = Object.values(users).filter(u => u.role === "Student");
+            const select   = $("#studentSelect");
             select.empty();
-            students.forEach(s => select.append(`<option value="${s.accountId}">${s.firstName} ${s.lastName}</option>`));
+
+            if (!students.length) {
+                select.append(`<option value="">No students found</option>`);
+                return;
+            }
+            students.forEach(s =>
+                select.append(`<option value="${s.accountId}">${s.firstName} ${s.lastName}</option>`)
+            );
         }
 
         function populateSubjects() {
-            let user = getCurrentUser();
-            let subjects = user.subjects || [];
-            let select = $("#subjectSelect");
+            const user     = getCurrentUser();
+            /* Always read freshest from localStorage */
+            const stored   = (JSON.parse(localStorage.getItem("users") || "{}")[user.accountId]) || user;
+            const subjects = stored.subjects || [];
+            const select   = $("#subjectSelect");
             select.empty();
+
+            if (!subjects.length) {
+                select.append(`<option value="">Add a subject first</option>`);
+                return;
+            }
             subjects.forEach(sub => select.append(`<option value="${sub}">${sub}</option>`));
         }
 
         function addSubject() {
-            let subject = prompt("Enter subject");
+            const subjectRaw = prompt("Enter subject name:");
+            if (!subjectRaw) return;
+            const subject = subjectRaw.trim();
             if (!subject) return;
-            subject = subject.trim();
-            if (subject === "") return;
 
-            let users = JSON.parse(localStorage.getItem("users") || "{}");
-            let currentUser = getCurrentUser();
-            currentUser.subjects = currentUser.subjects || [];
-            if (currentUser.subjects.includes(subject)) {
-                alert("Subject already exists");
+            const users       = JSON.parse(localStorage.getItem("users") || "{}");
+            const currentUser = getCurrentUser();
+            const stored      = users[currentUser.accountId] || currentUser;
+            stored.subjects   = stored.subjects || [];
+
+            if (stored.subjects.includes(subject)) {
+                alert("Subject already exists.");
                 return;
             }
-            currentUser.subjects.push(subject);
-            users[currentUser.accountId] = currentUser;
+
+            stored.subjects.push(subject);
+            users[stored.accountId] = stored;
             localStorage.setItem("users", JSON.stringify(users));
-            sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
+            sessionStorage.setItem("currentUser", JSON.stringify(stored));
             populateSubjects();
-            alert("Subject added successfully");
+            showNotification(`Subject "${subject}" added!`, "success");
         }
 
         function addGrade() {
-            let studentId = $("#studentSelect").val();
-            let subject = $("#subjectSelect").val();
-            let period = $("#periodSelect").val();
-            let grade = parseFloat($("#gradeInput").val());
+            const studentId = $("#studentSelect").val();
+            const subject   = $("#subjectSelect").val();
+            const period    = $("#periodSelect").val();
+            const grade     = parseFloat($("#gradeInput").val());
 
             if (!studentId || !subject || !period || isNaN(grade) || grade < 0 || grade > 100) {
-                alert("Please fill all fields correctly (Grade must be 0-100)");
+                alert("Fill all fields correctly. Grade must be 0–100.");
                 return;
             }
 
-            let users = JSON.parse(localStorage.getItem("users") || "{}");
-            let student = users[studentId];
-            student.grades = student.grades || {};
-            student.grades[subject] = student.grades[subject] || { prelim: null, midterm: null, finals: null };
+            const users   = JSON.parse(localStorage.getItem("users") || "{}");
+            const student = users[studentId];
+            if (!student) { alert("Student not found."); return; }
+
+            student.grades                = student.grades || {};
+            student.grades[subject]       = student.grades[subject] || { prelim: null, midterm: null, finals: null };
             student.grades[subject][period] = grade;
-            users[studentId] = student;
+            users[studentId]              = student;
             localStorage.setItem("users", JSON.stringify(users));
 
             $("#gradeInput").val("");
-            alert("Grade added successfully");
+            showNotification("Grade saved!", "success");
             refreshGradesTable();
         }
 
         function refreshGradesTable() {
-            let users = JSON.parse(localStorage.getItem("users") || "{}");
-            let tbody = $("#gradesTable tbody");
-            tbody.empty();
+            const users   = JSON.parse(localStorage.getItem("users") || "{}");
+            const allRows = [];
+
             Object.values(users).filter(u => u.role === "Student").forEach(student => {
-                let grades = student.grades || {};
+                const grades = student.grades || {};
+
+                if (!Object.keys(grades).length) {
+                    allRows.push({
+                        student, subject: "—",
+                        prelim: "—", midterm: "—", finals: "—",
+                        finalAvg: "—", status: "—"
+                    });
+                    return;
+                }
+
                 Object.keys(grades).forEach(subject => {
-                    let g = grades[subject];
-                    let prelim = g.prelim != null ? g.prelim : "--";
-                    let midterm = g.midterm != null ? g.midterm : "--";
-                    let finals = g.finals != null ? g.finals : "--";
+                    const g       = grades[subject] || {};
+                    const prelim  = g.prelim  != null ? g.prelim  : "—";
+                    const midterm = g.midterm != null ? g.midterm : "—";
+                    const finals  = g.finals  != null ? g.finals  : "—";
+                    const nums    = [g.prelim, g.midterm, g.finals].filter(x => x != null);
+                    const finalAvg = nums.length
+                        ? (nums.reduce((a, b) => a + b, 0) / nums.length).toFixed(2)
+                        : "—";
+                    const status  = finalAvg === "—"
+                        ? "—"
+                        : parseFloat(finalAvg) >= 60 ? "Passed" : "Failed";
 
-                    let numericGrades = [g.prelim, g.midterm, g.finals].filter(x => x != null);
-                    let finalAvg = numericGrades.length ? (numericGrades.reduce((a, b) => a + b, 0) / numericGrades.length).toFixed(2) : "--";
-                    let status = finalAvg === "--" ? "--" : (finalAvg >= 60 ? "Passed" : "Failed");
-
-                    tbody.append(`<tr>
-<td>${student.firstName} ${student.lastName}</td>
-<td>${subject}</td>
-<td>${prelim}</td>
-<td>${midterm}</td>
-<td>${finals}</td>
-<td>${finalAvg}</td>
-<td>${status}</td>
-</tr>`);
+                    allRows.push({ student, subject, prelim, midterm, finals, finalAvg, status });
                 });
             });
+
+            /* Sort by student name */
+            allRows.sort((a, b) =>
+                (`${a.student.firstName} ${a.student.lastName}`)
+                    .localeCompare(`${b.student.firstName} ${b.student.lastName}`)
+            );
+
+            const tbody = $("#gradesTable tbody");
+            tbody.empty();
+
+            if (!allRows.length) {
+                tbody.append(`
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <span class="empty-icon">📋</span>
+                                <h3>No students yet</h3>
+                                <p>Students are added from the Admin panel.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `);
+                $("#rowCount").text("");
+                return;
+            }
+
+            allRows.forEach(row => {
+                const statusHtml = row.status === "Passed"
+                    ? `<span class="badge badge-passed">✓ Passed</span>`
+                    : row.status === "Failed"
+                        ? `<span class="badge badge-failed">✗ Failed</span>`
+                        : `<span style="color:var(--text-muted);">—</span>`;
+
+                tbody.append(`
+                    <tr>
+                        <td><strong>${row.student.firstName} ${row.student.lastName}</strong></td>
+                        <td>${row.subject}</td>
+                        <td>${row.prelim}</td>
+                        <td>${row.midterm}</td>
+                        <td>${row.finals}</td>
+                        <td><strong>${row.finalAvg}</strong></td>
+                        <td>${statusHtml}</td>
+                    </tr>
+                `);
+            });
+
+            $("#rowCount").text(`${allRows.length} record${allRows.length !== 1 ? "s" : ""}`);
         }
     </script>
 
 </body>
-
 </html>

@@ -18,7 +18,9 @@
 
     <nav>
         <h3>KatapatanEagerGNC</h3>
-        <a href="about.html">About Us</a>
+        <div class="nav-links">
+            <a href="about.html">About Us</a>
+        </div>
     </nav>
 
     <div class="container">
@@ -101,11 +103,6 @@
 
         let isLogin = true;
 
-
-        /* -------------------------
-        CREATE DEFAULT ADMIN
-        ------------------------- */
-
         $(document).ready(function () {
 
             let users = JSON.parse(localStorage.getItem("users") || "{}")
@@ -131,11 +128,6 @@
 
         })
 
-
-
-        /* -------------------------
-        TOGGLE LOGIN / SIGNUP
-        ------------------------- */
 
         $("#toggleBtn").click(function () {
 
@@ -164,12 +156,6 @@
             }
 
         })
-
-
-
-        /* -------------------------
-        LOGIN
-        ------------------------- */
 
         $("#loginButton").click(function () {
 
@@ -226,12 +212,6 @@
 
         })
 
-
-
-        /* -------------------------
-        ENTER KEY LOGIN
-        ------------------------- */
-
         $("#loginPassword").keypress(function (e) {
 
             if (e.which === 13) {
@@ -241,12 +221,6 @@
             }
 
         })
-
-
-
-        /* -------------------------
-        SIGN UP
-        ------------------------- */
 
         $("#signupButton").click(function () {
 

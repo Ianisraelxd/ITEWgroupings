@@ -1,15 +1,13 @@
-# Style Consolidation TODO
+# Task: Add section to students (admin assignable) + sort teacher.html table by section
 
-## Plan Steps:
-- [x] Step 1: Merge adminStyle.css into style.css and fix formatting
-- [x] Step 2: Extract inline <style> from pages/admin.html to style.css
-- [x] Step 3: Replace inline style= attributes in pages/admin.html with classes
-- [x] Step 4: Update all HTML files to link only style.css (remove adminStyle.css)
-- [x] Step 5: Fix tables and minor inline attrs in student.html/teacher.html  
-- [x] Step 6: Check/update remaining pages/*.html
-- [x] Step 7: Delete adminStyle.css
-- [ ] Step 8: Validate and complete
+## Steps to complete:
+- [x] 1. **Edit pages/admin.html**: Add Section input to user modal, add Section column to studentTable thead/tbody.
+- [x] 2. **Edit Scripts/admin-dashboard.js**: Update addUser/editUser/clearModalInputs/editUser/displayUsers to handle section field.
+- [x] 3. **Edit pages/teacher.html**: Add sort dropdown above gradesTable.
+- [x] 4. **Edit Scripts/teacher.js**: Update refreshGradesTable to support sorting by section/name, add change listener.
+- [x] 5. **Test changes** across admin/teacher pages.
+- [x] 6. **Complete task** with attempt_completion.
 
-Current progress: All core style consolidation complete. Minor table borders remain as they are functional inline attributes in JS-generated tables.
+All steps completed. Task done.
 
-Current progress: Starting Step 1
+**Fixed additional error**: ReferenceError in admin-dashboard.js (undeclared selectedAccountId/isEditing).

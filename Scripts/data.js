@@ -1,3 +1,4 @@
+// this is a data manager weve made so our website have CRUD capability  and an ability to save it in a local storage
 class DataManager {
 
     static STORAGE_KEYS = {
@@ -7,14 +8,17 @@ class DataManager {
         ATTENDANCE: "attendance"
     };
 
+    // getting all key from the local Storage
     static getAll(key) {
         return JSON.parse(localStorage.getItem(this.STORAGE_KEYS[key]) || "[]");
     }
 
+    // saving it
     static save(key, data) {
         localStorage.setItem(this.STORAGE_KEYS[key], JSON.stringify(data));
     }
 
+    // creating an item
     static create(key, item) {
 
         const data = this.getAll(key);
@@ -29,6 +33,7 @@ class DataManager {
         return item;
     }
 
+    // for updting the data
     static update(key, id, updates) {
 
         const data = this.getAll(key);
@@ -56,6 +61,7 @@ class DataManager {
         );
     }
 
+    // this is for generating a report so we can save it into a CSV file
     static generateReport(type) {
 
         switch (type) {
@@ -84,6 +90,7 @@ class DataManager {
         }
     }
 
+    // in order to save it in CSV
     static exportCSV(data, filename) {
 
         if (!data.length) return;

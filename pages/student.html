@@ -1,128 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
-
-<link rel="stylesheet" href="../style.css">
-
+    <title>Student Dashboard — KatapatanEagerGNC</title>
+    <link rel="stylesheet" href="../style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../Scripts/main.js"></script>
     <script src="../Scripts/data.js"></script>
     <script src="../Scripts/user.js"></script>
     <script src="../Scripts/student.js"></script>
 </head>
-
 <body>
-<nav>
-    <h3>KatapatanEagerGNC</h3>
-    <a href="about.html">About</a>
-    <a href="#" onclick="logout()">Logout</a>
-</nav>
 
-<div class="admin-layout">
-
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h3>Student Panel</h3>
-            <span class="welcome-user"></span>
+    <nav>
+        <h3>KatapatanEagerGNC</h3>
+        <div class="nav-links">
+            <a href="about.html">About</a>
+            <a href="introPage.html" class="nav-logout" onclick="logout(); return false;">Logout</a>
         </div>
-        <nav class="sidebar-nav">
-            <a href="#" class="active">My Grades</a>
-            <a href="#">Attendance</a>
-        </nav>
-    </aside>
+    </nav>
 
-    <main class="admin-main">
-        <div class="admin-header">
-            <h1>My Grades</h1>
-            <input type="text" id="studentSearch" placeholder="Search subject">
-        </div>
+    <div class="admin-layout">
 
-        <div class="card">
-            <div class="card-header">
-                <h2>Subjects & Grades</h2>
-                <span id="avgGrade">Average: --</span>
+        <!-- ── Sidebar ── -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Student Panel</h3>
+                <span class="welcome-user"></span>
             </div>
-            <div class="table-container">
-                <table id="gradesTable" border="1" style="width:100%; border-collapse: collapse; text-align:center;">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Prelim</th>
-                            <th>Midterm</th>
-                            <th>Finals</th>
-                            <th>Final Avg</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+            <nav class="sidebar-nav">
+                <a href="#" class="active">
+                    <span class="nav-icon">📊</span> My Grades
+                </a>
+                <a href="#">
+                    <span class="nav-icon">📅</span> Attendance
+                </a>
+            </nav>
+        </aside>
+
+        <!-- ── Main ── -->
+        <main class="admin-main">
+
+            <div class="admin-header">
+                <h1>My Grades</h1>
+                <p>Your academic performance across all subjects.</p>
+                <input type="text" id="studentSearch"
+                    placeholder="Search subject…" class="search-input">
             </div>
-        </div>
 
-    </main>
-</div>
+            <!-- Grade summary banner (hidden until grades load) -->
+            <div class="grade-summary" id="gradeSummary" style="display:none;">
+                <div class="summary-main">
+                    <div class="summary-label">Overall Average</div>
+                    <div class="big-avg" id="bigAvg">--</div>
+                    <div class="avg-status" id="avgStatusText"></div>
+                </div>
+                <div class="summary-stats">
+                    <div class="sum-stat">
+                        <span class="val" id="totalSubjects">0</span>
+                        <span class="lbl">Subjects</span>
+                    </div>
+                    <div class="sum-stat">
+                        <span class="val" id="passedCount" style="color:#5bbfa0;">0</span>
+                        <span class="lbl">Passed</span>
+                    </div>
+                    <div class="sum-stat">
+                        <span class="val" id="failedCount" style="color:#f0876e;">0</span>
+                        <span class="lbl">Failed</span>
+                    </div>
+                </div>
+            </div>
 
-<script>
-$(function () {
-    if (!checkRole("Student")) return;
-    loadStudentData();
-    $("#studentSearch").on("input", function () {
-        let value = $(this).val().toLowerCase();
-        $("#gradesTable tbody tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            <!-- Grades table -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>📚 Subjects &amp; Grades</h2>
+                    <span id="avgGrade"
+                        style="font-size:0.82rem;color:var(--text-muted);font-weight:600;"></span>
+                </div>
+                <div class="table-container">
+                    <table id="gradesTable">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Prelim</th>
+                                <th>Midterm</th>
+                                <th>Finals</th>
+                                <th>Final Avg</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align:center;color:var(--text-muted);padding:28px;">
+                                    Loading…
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        $(function () {
+            if (!checkRole("Student")) return;
+            loadStudentData();
+
+            $("#studentSearch").on("input", function () {
+                const val = $(this).val().toLowerCase();
+                $("#gradesTable tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().includes(val));
+                });
+            });
         });
-    });
-});
 
-function loadStudentData() {
-    const user = getCurrentUser();
-    let grades = user.grades || {};
-    displayGrades(grades);
-    updateAverage(grades);
-}
+        function loadStudentData() {
+            const user   = getCurrentUser();
+            const grades = user.grades || {};
+            displayGrades(grades);
+            updateSummary(grades);
+        }
 
-function displayGrades(grades) {
-    let tbody = $("#gradesTable tbody");
-    tbody.empty();
-    Object.keys(grades).forEach(subject => {
-        let g = grades[subject] || { prelim: null, midterm: null, finals: null };
-        let prelim = g.prelim != null ? g.prelim : "--";
-        let midterm = g.midterm != null ? g.midterm : "--";
-        let finals = g.finals != null ? g.finals : "--";
+        function displayGrades(grades) {
+            const tbody    = $("#gradesTable tbody");
+            const subjects = Object.keys(grades);
+            tbody.empty();
 
-        let numericGrades = [g.prelim, g.midterm, g.finals].filter(x => x != null);
-        let finalAvg = numericGrades.length ? (numericGrades.reduce((a,b)=>a+b,0)/numericGrades.length).toFixed(2) : "--";
-        let status = finalAvg === "--" ? "--" : (finalAvg >= 60 ? "Passed" : "Failed");
+            if (!subjects.length) {
+                tbody.append(`
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <span class="empty-icon">📭</span>
+                                <h3>No grades yet</h3>
+                                <p>Your teacher will add your grades once they are available.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `);
+                return;
+            }
 
-        tbody.append(`<tr>
-<td>${subject}</td>
-<td>${prelim}</td>
-<td>${midterm}</td>
-<td>${finals}</td>
-<td>${finalAvg}</td>
-<td>${status}</td>
-</tr>`);
-    });
-}
+            subjects.forEach(subject => {
+                const g       = grades[subject] || {};
+                const prelim  = g.prelim  != null ? g.prelim  : "—";
+                const midterm = g.midterm != null ? g.midterm : "—";
+                const finals  = g.finals  != null ? g.finals  : "—";
+                const nums    = [g.prelim, g.midterm, g.finals].filter(x => x != null);
+                const avg     = nums.length
+                    ? (nums.reduce((a, b) => a + b, 0) / nums.length).toFixed(2)
+                    : "—";
+                const passed  = avg !== "—" && parseFloat(avg) >= 60;
+                const statusHtml = avg === "—"
+                    ? `<span style="color:var(--text-muted);">—</span>`
+                    : passed
+                        ? `<span class="badge badge-passed">✓ Passed</span>`
+                        : `<span class="badge badge-failed">✗ Failed</span>`;
 
-function updateAverage(grades) {
-    let numericGrades = [];
-    Object.values(grades).forEach(g => {
-        [g.prelim, g.midterm, g.finals].forEach(v => { if (v != null) numericGrades.push(v); });
-    });
-    if (!numericGrades.length) {
-        $("#avgGrade").text("Average: -- (Status: --)");
-        return;
-    }
-    let avg = (numericGrades.reduce((a,b)=>a+b,0)/numericGrades.length).toFixed(2);
-    let status = avg >= 60 ? "Passed" : "Failed";
-    $("#avgGrade").text(`Average: ${avg} (Status: ${status})`);
-}
-</script>
+                tbody.append(`
+                    <tr>
+                        <td><strong>${subject}</strong></td>
+                        <td>${prelim}</td>
+                        <td>${midterm}</td>
+                        <td>${finals}</td>
+                        <td><strong>${avg}</strong></td>
+                        <td>${statusHtml}</td>
+                    </tr>
+                `);
+            });
+        }
+
+        function updateSummary(grades) {
+            const subjects = Object.keys(grades);
+            if (!subjects.length) return;
+
+            let allNums = [], passed = 0, failed = 0;
+
+            subjects.forEach(sub => {
+                const g    = grades[sub] || {};
+                const nums = [g.prelim, g.midterm, g.finals].filter(x => x != null);
+                if (nums.length) {
+                    const avg = nums.reduce((a, b) => a + b, 0) / nums.length;
+                    allNums.push(avg);
+                    if (avg >= 60) passed++; else failed++;
+                }
+            });
+
+            if (!allNums.length) {
+                $("#avgGrade").text("No grades recorded yet.");
+                return;
+            }
+
+            const overall = (allNums.reduce((a, b) => a + b, 0) / allNums.length).toFixed(2);
+            const isPass  = parseFloat(overall) >= 60;
+
+            /* Show summary banner */
+            $("#gradeSummary").fadeIn(300);
+            $("#bigAvg").text(overall);
+            $("#avgStatusText").html(isPass
+                ? `<span style="color:#5bbfa0;font-weight:600;">✓ Overall Passing</span>`
+                : `<span style="color:#f0876e;font-weight:600;">⚠ Needs Improvement</span>`
+            );
+            $("#totalSubjects").text(subjects.length);
+            $("#passedCount").text(passed);
+            $("#failedCount").text(failed);
+
+            /* Card header label */
+            $("#avgGrade").text(`Avg: ${overall} — ${isPass ? "Passing" : "At Risk"}`);
+        }
+    </script>
 
 </body>
 </html>

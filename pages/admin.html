@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KatapatanEagerGNC - Admin Dashboard</title>
-<link rel="stylesheet" href="../style.css">
+    <title>Admin Dashboard — KatapatanEagerGNC</title>
+    <link rel="stylesheet" href="../style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../Scripts/main.js"></script>
     <script src="../Scripts/data.js"></script>
@@ -13,63 +12,69 @@
     <script src="../Scripts/administrator.js"></script>
     <script src="../Scripts/admin-dashboard.js"></script>
 </head>
-
 <body>
+
     <nav>
         <h3>KatapatanEagerGNC</h3>
-        <a href="about.html">About Us</a>
+        <div class="nav-links">
+            <a href="about.html">About</a>
+            <a href="introPage.html" class="nav-logout" onclick="logout(); return false;">Logout</a>
+        </div>
     </nav>
 
     <div class="admin-layout">
+
+        <!-- ── Sidebar ── -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h3>Admin Panel</h3>
-                <span>Welcome, Sir Janus</span>
+                <span class="welcome-user"></span>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="active">Dashboard</a>
-                <a href="#">Manage Users</a>
-                <a href="#">Courses</a>
-                <a href="#">Reports</a>
-                <a href="#">Settings</a>
-                <a href="introPage.html" class="logout-link">
-                    Logout
+                <a href="#" class="active">
+                    Dashboard
                 </a>
-            </nav>
+               </nav>
         </aside>
 
+        <!-- ── Main content ── -->
         <main class="admin-main">
+
+            <!-- Header -->
             <div class="admin-header">
                 <h1>Admin Dashboard</h1>
-                <input type="text" id="globalSearch" placeholder="🔍 Search users/sections/grades..." class="search-input">
-                <p>Overview with search & reports.</p>
+                <p>Manage students, teachers, sections and view grade reports.</p>
+                <input type="text"
+                    id="globalSearch"
+                    placeholder="Search users, sections…"
+                    class="search-input">
             </div>
-            <div id="searchResults" class="search-results" style="margin-bottom:20px;"></div>
 
+            <!-- Search results -->
+            <div id="searchResults"></div>
+
+            <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon students"></div>
+                  
                     <div class="stat-info">
                         <h3 id="studentCount">0</h3>
-                        <p>Total Students</p>
+                        <p>Students</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon teachers"></div>
                     <div class="stat-info">
                         <h3 id="teacherCount">0</h3>
                         <p>Teachers</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon courses"></div>
                     <div class="stat-info">
                         <h3 id="subjectCount">0</h3>
                         <p>Subjects</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon users"></div>
                     <div class="stat-info">
                         <h3 id="totalUsers">0</h3>
                         <p>Total Users</p>
@@ -77,66 +82,23 @@
                 </div>
             </div>
 
-            <div class="dashboard-grid full-width-grid">
-                <!-- Teachers Table -->
+            <!-- Cards grid -->
+            <div class="dashboard-grid">
+
+                <!-- Teachers -->
                 <div class="card">
                     <div class="card-header">
                         <h2>Teachers</h2>
-                        <button id="openTeacherModalBtn" class="add-user-btn">+ Add Teacher</button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-container">
-                            <table id="teacherTable">
-                                <thead>
-                                    <tr>
-                                        <th>Account ID</th>
-                                        <th>Name</th>
-                                        <th>Subjects</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Students Table -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Students</h2>
-                        <button id="openStudentModalBtn" class="add-user-btn">+ Add Student</button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-container">
-                            <table id="studentTable">
-                                <thead>
-                                    <tr>
-                                        <th>Account ID</th>
-                                        <th>Name</th>
-                                        <th>Subjects</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sections Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Sections</h2>
-                        <button id="addSectionBtnGlobal" class="add-user-btn">+ Add Section</button>
+                        <button id="openTeacherModalBtn" class="btn-sm">+ Add Teacher</button>
                     </div>
                     <div class="table-container">
-                        <table id="sectionsTableAdmin">
+                        <table id="teacherTable">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Name</th>
-                                    <th>Teacher</th>
-                                    <th>Subject</th>
+                                    <th>Section</th>
+                                    <th>Subjects</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -145,246 +107,303 @@
                     </div>
                 </div>
 
-                <!-- Reports Card -->
+                <!-- Students -->
                 <div class="card">
                     <div class="card-header">
-                        <h2>Reports</h2>
-                        <button onclick="exportReport('studentGrades', 'grades.csv')" class="add-user-btn">Export Grades</button>
-                        <button onclick="exportReport('attendance', 'attendance.csv')" class="add-user-btn">Export Attendance</button>
+                        <h2>Students</h2>
+                        <button id="openStudentModalBtn" class="btn-sm">+ Add Student</button>
                     </div>
-                    <div id="reportsPreview">
-                        <div id="gradesPreview" class="table-container" style="margin-top:15px;">
-                            <table id="gradesReportTable" border="1" style="width:100%; border-collapse: collapse; text-align:center;">
-                                <thead>
-                                    <tr>
-                                        <th>Student</th>
-                                        <th>Subject</th>
-                                        <th>Prelim</th>
-                                        <th>Midterm</th>
-                                        <th>Finals</th>
-                                        <th>Final Avg</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+                    <div class="table-container">
+                        <table id="studentTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Section</th>
+                                    <th>Subjects</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
+                <!-- Sections -->
                 <div class="card">
                     <div class="card-header">
-                        <h2>Quick Actions</h2>
+                        <h2>Sections</h2>
+                        <button id="addSectionBtnGlobal" class="btn-sm">+ Add Section</button>
                     </div>
-                    <div class="card-body">
-                        <div class="action-grid">
-                            <button class="action-btn" id="quickAddStudent"><span>+</span><small>Quick Add Student</small></button>
-                            <button class="action-btn" id="quickAddTeacher"><span>+</span><small>Quick Add Teacher</small></button>
-                            <button class="action-btn" onclick="routeTo('reports')"><span>📊</span><small>Full Reports</small></button>
-                            <button class="action-btn" id="clearAllData"><span>🗑️</span><small>Clear All Data</small></button>
-                        </div>
+                    <div class="table-container">
+                        <table id="sectionsTableAdmin">
+                            <thead>
+                                <tr>
+                                    <th>Section</th>
+                                    <th>Teacher</th>
+                                    <th>Subject</th>
+                                    <th>Students</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
+
+                <!-- Grades Report -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Grades Report</h2>
+                        <button onclick="exportReport('studentGrades','grades.csv')" class="btn-sm btn-outline">
+                            Export CSV
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="gradesReportTable">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Subject</th>
+                                    <th>Prelim</th>
+                                    <th>Midterm</th>
+                                    <th>Finals</th>
+                                    <th>Avg</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div><!-- /.dashboard-grid -->
         </main>
     </div>
 
-    <!-- User Modal -->
+    <!-- ── Add / Edit User Modal ── -->
     <div id="userModal" class="modal">
         <div class="modal-content">
-    <span class="close-btn">&times;</span>
+            <button class="closeBtn" aria-label="Close">✕</button>
             <h2 id="modalTitle">Add User</h2>
-            <div class="modal-form">
-                <input type="text" id="accountId" placeholder="Account ID">
-                <input type="text" id="firstName" placeholder="First Name">
-                <input type="text" id="lastName" placeholder="Last Name">
-                <input type="password" id="password" placeholder="Password">
-                <select id="userRole">
-                    <option value="">Select Role</option>
-                    <option value="Student">Student</option>
-                    <option value="Teacher">Teacher</option>
-                    <option value="Administrator">Administrator</option>
-                </select>
-                <div id="subjectsSection" class="subjects-section">
-                    <label>Subjects (select at least 3):</label>
-                    <div class="subjects-checkboxes">
-                        <label><input type="checkbox" class="subject-chk" value="Mathematics"> Mathematics</label>
-                        <label><input type="checkbox" class="subject-chk" value="Science"> Science</label>
-                        <label><input type="checkbox" class="subject-chk" value="English"> English</label>
-                        <label><input type="checkbox" class="subject-chk" value="History"> History</label>
-                        <label><input type="checkbox" class="subject-chk" value="Filipino"> Filipino</label>
-                        <label><input type="checkbox" class="subject-chk" value="MAPEH"> MAPEH</label>
-                    </div>
-                </div>
-                <button id="saveUserBtn">Save User</button>
+
+            <input type="text"     id="accountId" placeholder="Account ID">
+            <input type="text"     id="firstName" placeholder="First Name">
+            <input type="text"     id="lastName"  placeholder="Last Name">
+            <input type="password" id="password"  placeholder="Password">
+
+            <select id="userRole">
+                <option value="">Select Role</option>
+                <option value="Student">Student</option>
+                <option value="Teacher">Teacher</option>
+            </select>
+
+            <div id="subjectsSection">
+                <label>Select Subjects</label>
+                <label><input type="checkbox" class="subject-chk" value="Mathematics"> Mathematics</label>
+                <label><input type="checkbox" class="subject-chk" value="Science"> Science</label>
+                <label><input type="checkbox" class="subject-chk" value="English"> English</label>
+                <label><input type="checkbox" class="subject-chk" value="History"> History</label>
+                <label><input type="checkbox" class="subject-chk" value="Filipino"> Filipino</label>
+                <label><input type="checkbox" class="subject-chk" value="MAPEH"> MAPEH</label>
             </div>
+
+            <div id="sectionSection">
+                <label>Section</label>
+                <select id="sectionInput">
+                    <option value="">Select Section</option>
+                </select>
+            </div>
+
+            <button id="saveUserBtn">Save User</button>
         </div>
     </div>
 
-
-
     <script>
-        let selectedAccountId = null;
-        let isEditing = false;
-
-        $("#userRole").change(function () {
-            let role = $(this).val();
-            if (role === "Student" || role === "Teacher") $("#subjectsSection").slideDown();
-            else $("#subjectsSection").slideUp();
-        });
-
-        $(".closeBtn").click(() => $("#userModal").fadeOut());
-        $(window).click(e => { if (e.target.id === "userModal") $("#userModal").fadeOut(); });
-
-        function getAllUsers() { return JSON.parse(localStorage.getItem("users") || "{}"); }
-        function saveAllUsers(users) { localStorage.setItem("users", JSON.stringify(users)); }
-
-        $("#saveUserBtn").click(function () { isEditing ? updateUser() : addUser(); });
-
-        function addUser() {
-            let accountId = $("#accountId").val().trim();
-            let firstName = $("#firstName").val().trim();
-            let lastName = $("#lastName").val().trim();
-            let password = $("#password").val().trim();
-            let role = $("#userRole").val();
-            if (!accountId || !firstName || !lastName || !password || !role) return alert("Complete all fields");
-
-            let subjects = [];
-            if (role === "Student" || role === "Teacher") {
-                $(".subject-chk:checked").each(function () { subjects.push($(this).val()); });
-                if (subjects.length < 3) return alert("Select at least 3 subjects");
-            }
-
-            let users = getAllUsers();
-            if (users[accountId]) return alert("Account already exists");
-
-            users[accountId] = { accountId, firstName, lastName, fullName: firstName + " " + lastName, password, role, subjects, createdAt: new Date().toISOString() };
-            saveAllUsers(users);
-            $("#userModal").fadeOut();
-            displayUsers();
-            clearModalInputs();
-        }
-
-        function displayUsers() {
-            let users = getAllUsers();
-            let teacherBody = $("#teacherTable tbody");
-            let studentBody = $("#studentTable tbody");
-            teacherBody.empty();
-            studentBody.empty();
-            Object.values(users).forEach(user => {
-                let row = `<tr>
-<td>${user.accountId}</td>
-<td>${user.firstName} ${user.lastName}</td>
-<td>${user.subjects ? user.subjects.join(", ") : "-"}</td>
-<td>
-<button class="btn-sm editBtn" data-id="${user.accountId}">Edit</button>
-<button class="btn-sm deleteBtn" data-id="${user.accountId}">Delete</button>
-</td>
-</tr>`;
-                if (user.role === "Teacher") teacherBody.append(row);
-                if (user.role === "Student") studentBody.append(row);
-            });
-
-            $(".editBtn").click(function () { editUser($(this).data("id")); });
-            $(".deleteBtn").click(function () { deleteUser($(this).data("id")); });
-            updateStats();
-            loadGradesPreview();
-        }
-
-        function updateStats() {
-            let users = getAllUsers();
-            let student = 0, teacher = 0, subjects = [];
-            Object.values(users).forEach(u => {
-                if (u.role === "Student") student++;
-                if (u.role === "Teacher") teacher++;
-                if (u.subjects) u.subjects.forEach(s => { if (!subjects.includes(s)) subjects.push(s); });
-            });
-            $("#studentCount").text(student);
-            $("#teacherCount").text(teacher);
-            $("#subjectCount").text(subjects.length);
-            $("#totalUsers").text(Object.keys(users).length);
-        }
-
-        $("#clearAllData").click(() => { if (confirm("Clear all data?")) { localStorage.removeItem("users"); localStorage.removeItem("grades"); localStorage.removeItem("sections"); location.reload(); } });
-
-        function clearModalInputs() {
-            $("#accountId").val("");
-            $("#firstName").val("");
-            $("#lastName").val("");
-            $("#password").val("");
-            $("#userRole").val("");
-            $(".subject-chk").prop("checked", false);
-            $("#subjectsSection").hide();
-        }
-
-        // ---------------------- Grades Preview ----------------------
+        /* ── Grades preview in report card ── */
         function loadGradesPreview() {
-            let users = JSON.parse(localStorage.getItem("users") || "{}");
-            let tbody = $("#gradesReportTable tbody");
+            const users = getAllUsers();
+            const tbody = $("#gradesReportTable tbody");
             tbody.empty();
 
+            let hasRows = false;
+
             Object.values(users).filter(u => u.role === "Student").forEach(student => {
-                let grades = student.grades || {};
+                const grades = student.grades || {};
                 Object.keys(grades).forEach(subject => {
-                    let g = grades[subject] || { prelim: null, midterm: null, finals: null };
-                    let prelim = g.prelim != null ? g.prelim : "--";
-                    let midterm = g.midterm != null ? g.midterm : "--";
-                    let finals = g.finals != null ? g.finals : "--";
-                    let numericGrades = [g.prelim, g.midterm, g.finals].filter(x => x != null);
-                    let finalAvg = numericGrades.length ? (numericGrades.reduce((a,b)=>a+b,0)/numericGrades.length).toFixed(2) : "--";
-                    let status = finalAvg === "--" ? "--" : (finalAvg >= 75 ? "Passed" : "Failed");
-                    tbody.append(`<tr>
-<td>${student.firstName} ${student.lastName}</td>
-<td>${subject}</td>
-<td>${prelim}</td>
-<td>${midterm}</td>
-<td>${finals}</td>
-<td>${finalAvg}</td>
-<td>${status}</td>
-</tr>`);
+                    const g       = grades[subject] || {};
+                    const prelim  = g.prelim  ?? "—";
+                    const midterm = g.midterm ?? "—";
+                    const finals  = g.finals  ?? "—";
+                    const nums    = [g.prelim, g.midterm, g.finals].filter(x => x != null);
+                    const avg     = nums.length
+                        ? (nums.reduce((a, b) => a + b, 0) / nums.length).toFixed(2)
+                        : "—";
+                    const status  = avg === "—"
+                        ? "—"
+                        : parseFloat(avg) >= 75 ? "Passed" : "Failed";
+
+                    tbody.append(`
+                        <tr>
+                            <td><strong>${student.firstName} ${student.lastName}</strong></td>
+                            <td>${subject}</td>
+                            <td>${prelim}</td>
+                            <td>${midterm}</td>
+                            <td>${finals}</td>
+                            <td><strong>${avg}</strong></td>
+                            <td class="${status.toLowerCase()}">${status}</td>
+                        </tr>
+                    `);
+                    hasRows = true;
                 });
+            });
+
+            if (!hasRows) {
+                tbody.append(`
+                    <tr>
+                        <td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px;">
+                            No grade records yet.
+                        </td>
+                    </tr>
+                `);
+            }
+        }
+
+        /* ── Section options dropdown ── */
+        function loadSectionOptions() {
+            const sections = JSON.parse(localStorage.getItem("sections") || "[]");
+            const select   = $("#sectionInput");
+            select.empty().append(`<option value="">Select Section</option>`);
+            sections.forEach(s => select.append(`<option value="${s.name}">${s.name}</option>`));
+        }
+
+        /* ── Sections table ── */
+        function loadSectionsTable() {
+            const sections = JSON.parse(localStorage.getItem("sections") || "[]");
+            const users    = getAllUsers();
+            const tbody    = $("#sectionsTableAdmin tbody");
+            tbody.empty();
+
+            if (!sections.length) {
+                tbody.append(`
+                    <tr>
+                        <td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">
+                            No sections yet.
+                        </td>
+                    </tr>
+                `);
+                return;
+            }
+
+            sections.forEach((section, index) => {
+                const count = Object.values(users)
+                    .filter(u => u.role === "Student" && u.section === section.name).length;
+                tbody.append(`
+                    <tr>
+                        <td><strong>${section.name}</strong></td>
+                        <td>${section.teacher || "—"}</td>
+                        <td>${section.subject || "—"}</td>
+                        <td><span class="badge badge-info">${count}</span></td>
+                        <td>
+                            <button class="btn-sm btn-danger" onclick="deleteSection(${index})">Delete</button>
+                        </td>
+                    </tr>
+                `);
             });
         }
 
-        function exportReport(type, filename) {
-            if (type === "studentGrades") {
-                let csv = "Student,Subject,Prelim,Midterm,Finals,Final Avg,Status\n";
-                let users = JSON.parse(localStorage.getItem("users") || "{}");
-                Object.values(users).filter(u => u.role === "Student").forEach(student => {
-                    let grades = student.grades || {};
-                    Object.keys(grades).forEach(subject => {
-                        let g = grades[subject] || { prelim: null, midterm: null, finals: null };
-                        let prelim = g.prelim != null ? g.prelim : "--";
-                        let midterm = g.midterm != null ? g.midterm : "--";
-                        let finals = g.finals != null ? g.finals : "--";
-                        let numericGrades = [g.prelim, g.midterm, g.finals].filter(x => x != null);
-                        let finalAvg = numericGrades.length ? (numericGrades.reduce((a,b)=>a+b,0)/numericGrades.length).toFixed(2) : "--";
-                        let status = finalAvg === "--" ? "--" : (finalAvg >= 75 ? "Passed" : "Failed");
-                        csv += `${student.firstName} ${student.lastName},${subject},${prelim},${midterm},${finals},${finalAvg},${status}\n`;
-                    });
-                });
-                downloadCSV(csv, filename);
+        /* ── Save user (add or edit) ── */
+        $("#saveUserBtn").off("click").on("click", function (e) {
+            e.preventDefault();
+
+            const accountId = $("#accountId").val().trim();
+            const firstName = $("#firstName").val().trim();
+            const lastName  = $("#lastName").val().trim();
+            const password  = $("#password").val().trim();
+            const role      = $("#userRole").val();
+            const section   = $("#sectionInput").val() || null;
+
+            if (!accountId || !firstName || !lastName || !role) {
+                alert("Please fill in all required fields.");
+                return;
             }
-            if (type === "attendance") { /* keep your attendance export */ }
+
+            let subjects = [];
+            $(".subject-chk:checked").each(function () { subjects.push($(this).val()); });
+
+            if (subjects.length < 3) {
+                alert("Please select at least 3 subjects.");
+                return;
+            }
+
+            let users = getAllUsers();
+
+            if (selectedAccountId && isEditing) {
+                const user    = users[selectedAccountId];
+                user.firstName = firstName;
+                user.lastName  = lastName;
+                user.fullName  = `${firstName} ${lastName}`;
+                if (password) user.password = password;
+                user.subjects  = subjects;
+                user.section   = section;
+                users[selectedAccountId] = user;
+            } else {
+                if (users[accountId]) {
+                    alert("Account ID already exists.");
+                    return;
+                }
+                users[accountId] = {
+                    accountId, firstName, lastName,
+                    fullName: `${firstName} ${lastName}`,
+                    password: password || "123456",
+                    role, subjects, section,
+                    createdAt: new Date().toISOString()
+                };
+            }
+
+            localStorage.setItem("users", JSON.stringify(users));
+            displayUsers();
+            updateStats();
+            loadSectionsTable();
+            loadGradesPreview();
+
+            $("#userModal").removeClass("is-open").fadeOut(200);
+            clearModalInputs();
+        });
+
+        /* ── Section actions ── */
+        $("#addSectionBtnGlobal").off("click").on("click", function () {
+            const name = prompt("Enter section name:");
+            if (!name || !name.trim()) return;
+            const sections = JSON.parse(localStorage.getItem("sections") || "[]");
+            if (sections.some(s => s.name === name.trim())) {
+                alert("Section already exists."); return;
+            }
+            sections.push({ name: name.trim() });
+            localStorage.setItem("sections", JSON.stringify(sections));
+            loadSectionsTable();
+            loadSectionOptions();
+        });
+
+        function deleteSection(index) {
+            if (!confirm("Delete this section?")) return;
+            const sections = JSON.parse(localStorage.getItem("sections") || "[]");
+            sections.splice(index, 1);
+            localStorage.setItem("sections", JSON.stringify(sections));
+            loadSectionsTable();
         }
 
-        function downloadCSV(csv, filename) {
-            let blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-            let link = document.createElement("a");
-            if (link.download !== undefined) {
-                let url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", filename);
-                link.style.visibility = "hidden";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
+        /* ── Clear modal ── */
+        function clearModalInputs() {
+            $("#accountId").val("").prop("disabled", false);
+            $("#firstName, #lastName, #password").val("");
+            $("#userRole").val("");
+            $(".subject-chk").prop("checked", false);
+            $("#sectionInput").val("");
+            selectedAccountId = null;
+            isEditing = false;
         }
-
-        displayUsers();
     </script>
-</body>
 
+</body>
 </html>
