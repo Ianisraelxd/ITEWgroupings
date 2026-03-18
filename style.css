@@ -579,6 +579,7 @@ main {
     flex-direction: column;
     padding: 0 var(--sp-md);
     gap: 2px;
+    justify-content: start  ;
 }
 
 .sidebar-nav a {
@@ -663,6 +664,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     gap: var(--sp-md);
+    margin-right: 15px;
     margin-bottom: var(--sp-xl);
 }
 
@@ -675,7 +677,7 @@ main {
     box-shadow: var(--shadow-sm);
     display: flex;
     align-items: center;
-    gap: var(--sp-md);
+    gap: 1px;
     border: 1px solid var(--border);
     transition: all 0.25s var(--ease-out);
     position: relative;
